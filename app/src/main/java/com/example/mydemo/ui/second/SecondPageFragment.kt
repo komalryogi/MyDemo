@@ -34,7 +34,7 @@ class SecondPageFragment : BaseFragment() {
         }
 
         btn_unlock.setOnClickListener {
-            data.isLocked = true
+            data.isLocked = false
             getMainActivity()!!.viewModel.updateData(getMainActivity()!!, data)
             getMainActivity()!!.onBackPressed()
         }
