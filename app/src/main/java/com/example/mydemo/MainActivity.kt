@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel =
             ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        viewModel.insertDataFirstTime(this)
     }
 
 

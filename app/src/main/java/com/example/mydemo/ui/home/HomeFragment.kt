@@ -1,12 +1,11 @@
 package com.example.mydemo.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mydemo.R
 import com.example.mydemo.base.BaseFragment
@@ -35,30 +34,19 @@ class HomeFragment : BaseFragment() {
     fun fetchItems() {
         viewModel.fetchData(context, object : RepoCallback<MutableList<LockInfo>> {
             override fun onResult(result: Resource<MutableList<LockInfo>, Resource.Status>) {
-                Log.e("komal", "data" + result.payload!!.size)
-
                 when (result.action) {
                     Resource.Status.SUCCESS -> {
                         val info = result.payload!! as MutableList<LockInfo>
                         if (info == null || info.size == 0) {
-                            Toast.makeText(
-                                this@HomeFragment.context,
-                                "No Data Found",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            displayToast("Data not found.")
                         } else {
                             updateDataOnUi(info)
                         }
 
                     }
                     Resource.Status.FAIL -> {
-                        Toast.makeText(
-                            this@HomeFragment.context,
-                            "Something went wrong",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        displayToast("Something went wrong")
                     }
-
                 }
             }
 
@@ -67,9 +55,17 @@ class HomeFragment : BaseFragment() {
 
     private fun updateDataOnUi(info: MutableList<LockInfo>) {
         rv_view.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val homeAdapter = HomeAdapter(info, context)
+        homeAdapter.setInfoListener(object : HomeAdapter.InfoClickedListener {
+            override fun onInfoClickedListener(info: LockInfo) {
+                displayToast("Clicked")
+                val bundle = Bundle()
+                bundle.putParcelable("model", info)
+                findNavController().navigate(R.id.action_nav_first_to_nav_second, bundle)
+            }
 
-
-        rv_view.adapter = HomeAdapter(info, context)
+        })
+        rv_view.adapter = homeAdapter
 
     }
 
