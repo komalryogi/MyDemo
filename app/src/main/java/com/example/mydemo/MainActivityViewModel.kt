@@ -18,7 +18,7 @@ class MainActivityViewModel : ViewModel() {
         return lockDetails;
     }
 
-    fun insertDataFirstTime(ctx: Context) {
+   /* fun insertDataFirstTime(ctx: Context) {
         Thread() {
             val lockInfo = LockInfo(0, false, "Item1")
             val lockInfo2 = LockInfo(0, true, "Item2")
@@ -43,7 +43,7 @@ class MainActivityViewModel : ViewModel() {
 
         }.start()
     }
-
+*/
     fun updateData(context: Context, lockInfo: LockInfo) {
         Thread() {
             var db = InfoDatabase.getInstance(context)
@@ -64,8 +64,20 @@ class MainActivityViewModel : ViewModel() {
             }.subscribe { it ->
                 if (it == null) {
                     callback.onResult(Resource(it, Resource.Status.FAIL, ""))
-                } else callback.onResult(Resource(it, Resource.Status.SUCCESS, ""))
+                } else {
+                    callback.onResult(Resource(it, Resource.Status.SUCCESS, ""))
+                }
             }
+    }
+
+    fun reset(context: Context?) {
+        Thread() {
+            InfoDatabase.getInstance(context!!).lockInfoDao().reset()
+            InfoDatabase.getInstance(context!!).lockInfoDao().resetNext()
+
+
+        }.start()
+
     }
 
 }

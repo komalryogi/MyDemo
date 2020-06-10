@@ -21,7 +21,6 @@ interface LockInfoDao {
     @Update
     fun update(LockInfo: LockInfo): Int
 
-
     @Query("UPDATE `lock_info_table` SET isLocked= 1 WHERE id=1")
     fun reset(): Int
 

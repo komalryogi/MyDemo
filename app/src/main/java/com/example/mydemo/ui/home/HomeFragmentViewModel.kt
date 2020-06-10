@@ -26,14 +26,19 @@ class HomeFragmentViewModel : ViewModel() {
             }.subscribe { it ->
                 if (it == null) {
                     callback.onResult(Resource(it, Resource.Status.FAIL, ""))
-                } else callback.onResult(Resource(it, Resource.Status.SUCCESS, ""))
+                } else {
+
+                    callback.onResult(Resource(it, Resource.Status.SUCCESS, ""))
+                }
             }
     }
 
-    fun reset(context: Context?){
-        Thread(){
+    fun reset(context: Context?) {
+        Thread() {
             InfoDatabase.getInstance(context!!).lockInfoDao().reset()
             InfoDatabase.getInstance(context!!).lockInfoDao().resetNext()
+
+
         }.start()
 
     }

@@ -1,11 +1,13 @@
 package com.example.mydemo.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,7 @@ import com.example.mydemo.data.remote.Resource
 import com.example.mydemo.data.remote.remote.model.RepoCallback
 import com.example.mydemo.ui.home.adapter.HomeAdapter
 
+
 class HomeFragment : BaseFragment() {
 
     lateinit var viewModel: HomeFragmentViewModel;
@@ -24,6 +27,12 @@ class HomeFragment : BaseFragment() {
     lateinit var rv_view: RecyclerView
     lateinit var homeAdapter: HomeAdapter
     var info = mutableListOf<LockInfo>()
+    var handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(message: Message?) {
+            homeAdapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,20 +54,11 @@ class HomeFragment : BaseFragment() {
         updateDataOnUi()
 
         btn_reset.setOnClickListener {
-            viewModel.reset(context)
+            info.clear()
+            fetchItems()
         }
-        viewModel.getLockDetals()
-            .observe(viewLifecycleOwner, object : Observer<MutableList<LockInfo>> {
-                override fun onChanged(t: MutableList<LockInfo>?) {
-                    info.addAll(t!!)
-                    rv_view.post {
-                        homeAdapter.notifyDataSetChanged()
 
-                    }
 
-                }
-
-            })
     }
 
     fun fetchItems() {
@@ -68,12 +68,11 @@ class HomeFragment : BaseFragment() {
                     Resource.Status.SUCCESS -> {
                         val model = result.payload!! as MutableList<LockInfo>
                         if (model == null || model.size == 0) {
-                            displayToast("Data not found.")
+//                            displayToast("Data not found.")
                         } else {
                             info.addAll(model)
-                            homeAdapter.notifyDataSetChanged()
+                            updateAdapter()
                         }
-
                     }
                     Resource.Status.FAIL -> {
                         displayToast("Something went wrong")
@@ -82,6 +81,14 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+    }
+
+    fun updateAdapter() {
+
+        val message: Message =
+            handler.obtainMessage(1, "")
+        message.sendToTarget()
+
     }
 
     private fun updateDataOnUi() {
