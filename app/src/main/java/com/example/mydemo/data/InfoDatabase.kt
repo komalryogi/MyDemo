@@ -39,11 +39,11 @@ abstract class InfoDatabase : RoomDatabase() {
 
         fun insertDataFirstTime(ctx: Context) {
             Thread() {
-                val lockInfo = LockInfo(0, false, "Item1")
-                val lockInfo2 = LockInfo(0, true, "Item2")
-                val lockInfo3 = LockInfo(0, true, "Item3")
-                val lockInfo4 = LockInfo(0, true, "Item4")
-                val lockInfo5 = LockInfo(0, true, "Item5")
+                val lockInfo = LockInfo(0, false, "Unlock")
+                val lockInfo2 = LockInfo(0, true, "Lock")
+                val lockInfo3 = LockInfo(0, true, "Lock")
+                val lockInfo4 = LockInfo(0, true, "Lock")
+                val lockInfo5 = LockInfo(0, true, "Lock")
                 val listItems = mutableListOf<LockInfo>()
 
                 listItems.add(lockInfo)

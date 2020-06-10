@@ -30,13 +30,23 @@ class HomeAdapter(val items: MutableList<LockInfo>, val context: Context?) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = items.get(position)
         holder?.btn_name?.text = model.name
+        if (model.isLocked) {
+            holder?.btn_name.isClickable = false
+            holder?.btn_name.setText("Locked")
+            holder?.btn_name.isEnabled = false
+        } else {
+            holder?.btn_name.isClickable = true
+            holder?.btn_name.setText("Unlock")
+            holder?.btn_name.isEnabled = true
+        }
         holder?.btn_name.setOnClickListener {
             if (position <= 1) {
                 if (listener != null) {
-                    if (position == 0)
+                    listener.onInfoClickedListener((position))
+                   /* if (position == 0)
                         listener.onInfoClickedListener((position + 1))
                     else
-                        listener.onInfoClickedListener((position))
+                        listener.onInfoClickedListener((position))*/
 
                 }
             } else

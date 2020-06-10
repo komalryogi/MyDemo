@@ -32,28 +32,13 @@ class SecondPageFragment : BaseFragment() {
             data = model!!
 
         }
-        setDataOnUi()
 
         btn_unlock.setOnClickListener {
-            if (data.isLocked) {
-                data.isLocked = false
-                btn_unlock.setText("The Item is Already UnLocked")
-            } else {
-                data.isLocked = true
-                btn_unlock.setText("Locked")
-            }
+            data.isLocked = true
             getMainActivity()!!.viewModel.updateData(getMainActivity()!!, data)
             getMainActivity()!!.onBackPressed()
         }
 
-    }
-
-    fun setDataOnUi() {
-        if (data.isLocked) {
-            btn_unlock.setText("The Item is Already UnLocked")
-        } else {
-            btn_unlock.setText("Locked")
-        }
     }
 
 }

@@ -38,7 +38,6 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_home, container, false)
-
         btn_reset = view.findViewById(R.id.btn_reset)
         rv_view = view.findViewById(R.id.rv_view)
 
@@ -70,6 +69,7 @@ class HomeFragment : BaseFragment() {
                         if (model == null || model.size == 0) {
 //                            displayToast("Data not found.")
                         } else {
+                            info.clear()
                             info.addAll(model)
                             updateAdapter()
                         }
@@ -98,7 +98,12 @@ class HomeFragment : BaseFragment() {
         homeAdapter.setInfoListener(object : HomeAdapter.InfoClickedListener {
             override fun onInfoClickedListener(postion: Int) {
                 val bundle = Bundle()
-                bundle.putParcelable("model", info.get(postion))
+                var pos = 0
+                if (postion == 0)
+                    pos = postion + 1
+                else
+                    pos = postion
+                bundle.putParcelable("model", info.get(pos))
                 findNavController().navigate(R.id.action_nav_first_to_nav_second, bundle)
             }
 
