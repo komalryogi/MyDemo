@@ -22,6 +22,12 @@ interface LockInfoDao {
     fun update(LockInfo: LockInfo): Int
 
 
+    @Query("UPDATE `lock_info_table` SET isLocked= 1 WHERE id=1")
+    fun reset(): Int
+
+    @Query("UPDATE `lock_info_table` SET isLocked= 0 WHERE id>1")
+    fun resetNext(): Int
+
     @Query("SELECT * FROM `lock_info_table` WHERE id=:id")
     fun fetchById(id: Long): Single<MutableList<LockInfo>>
 

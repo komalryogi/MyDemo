@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mydemo.R
 import com.example.mydemo.data.entity.LockInfo
@@ -30,16 +31,26 @@ class HomeAdapter(val items: MutableList<LockInfo>, val context: Context?) :
         val model = items.get(position)
         holder?.btn_name?.text = model.name
         holder?.btn_name.setOnClickListener {
-            if (position <= 1)
+            if (position <= 1) {
                 if (listener != null) {
-                    listener.onInfoClickedListener(model)
+                    if (position == 0)
+                        listener.onInfoClickedListener((position + 1))
+                    else
+                        listener.onInfoClickedListener((position))
+
                 }
+            } else
+                Toast.makeText(
+                    context,
+                    "Not Allowed to Unlock",
+                    Toast.LENGTH_LONG
+                ).show()
         }
 
     }
 
     public interface InfoClickedListener {
-        fun onInfoClickedListener(info: LockInfo)
+        fun onInfoClickedListener(postion: Int)
     }
 
 }

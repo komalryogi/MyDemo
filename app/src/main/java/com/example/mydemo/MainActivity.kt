@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProviders
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainActivityViewModel;
+    public lateinit var viewModel: MainActivityViewModel;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
