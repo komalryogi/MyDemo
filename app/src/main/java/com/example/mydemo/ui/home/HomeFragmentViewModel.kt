@@ -33,11 +33,12 @@ class HomeFragmentViewModel : ViewModel() {
             }
     }
 
-    fun reset(context: Context?) {
+    fun reset(context: Context?, callback: RepoCallback<MutableList<LockInfo>>) {
         Thread() {
             InfoDatabase.getInstance(context!!).lockInfoDao().reset()
             InfoDatabase.getInstance(context!!).lockInfoDao().resetNext()
 
+            fetchData(context,callback)
 
         }.start()
 

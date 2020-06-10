@@ -54,7 +54,27 @@ class HomeFragment : BaseFragment() {
 
         btn_reset.setOnClickListener {
             info.clear()
-            fetchItems()
+            viewModel.reset(context, object : RepoCallback<MutableList<LockInfo>> {
+                override fun onResult(result: Resource<MutableList<LockInfo>, Resource.Status>) {
+                    when (result.action) {
+                        Resource.Status.SUCCESS -> {
+                            val model = result.payload!! as MutableList<LockInfo>
+                            if (model == null || model.size == 0) {
+//                            displayToast("Data not found.")
+                            } else {
+                                info.clear()
+                                info.addAll(model)
+                                updateAdapter()
+                            }
+                        }
+                        Resource.Status.FAIL -> {
+                            displayToast("Something went wrong")
+                        }
+                    }
+                }
+
+            })
+
         }
 
 
